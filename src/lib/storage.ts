@@ -522,5 +522,14 @@ export const Storage = {
       return false;
     }
   },
+
+  resetToDefault(): void {
+    setStorage(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS);
+    setStorage(STORAGE_KEYS.CATEGORIES, DEFAULT_CATEGORIES);
+    setStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
+    setStorage(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
+    setStorage(STORAGE_KEYS.INVOICES, []);
+    setStorage(STORAGE_KEYS.PAYMENTS, []);
+  },
 };
 
