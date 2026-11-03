@@ -389,20 +389,42 @@ export default function App() {
               </button>
             </div>
 
-            {/* Shop Selector Dropdown */}
-            <div className="relative">
-              <select
-                value={selectedCustomerId || ""}
-                onChange={(e) => setSelectedCustomerId(Number(e.target.value))}
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm font-bold text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 shadow-inner"
+            {/* Shop Selector Dropdown or Empty State */}
+            {customers.length === 0 ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setShopName("");
+                  setShopArea("");
+                  setShopPhone("");
+                  setShopBalance("");
+                  setIsNewShopModalOpen(true);
+                }}
+                className="w-full py-4 px-3 border-2 border-dashed border-emerald-300 bg-emerald-50/50 hover:bg-emerald-50 rounded-2xl text-emerald-800 flex flex-col items-center justify-center gap-1 transition active:scale-98"
               >
-                {customers.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name} {c.address ? `📍 ${c.address}` : ""} (باقی: Rs {c.balance.toLocaleString("en-PK")})
-                  </option>
-                ))}
-              </select>
-            </div>
+                <div className="flex items-center gap-1.5 font-bold text-sm">
+                  <Plus className="w-4 h-4" />
+                  <span>پہلی دکان شامل کریں (+ Add First Shop)</span>
+                </div>
+                <span className="text-[11px] text-slate-500">
+                  بل بنانے کے لیے پہلے کسی دکان کا اندراج کریں
+                </span>
+              </button>
+            ) : (
+              <div className="relative">
+                <select
+                  value={selectedCustomerId || ""}
+                  onChange={(e) => setSelectedCustomerId(Number(e.target.value))}
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm font-bold text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 shadow-inner"
+                >
+                  {customers.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} {c.address ? `📍 ${c.address}` : ""} (باقی: Rs {c.balance.toLocaleString("en-PK")})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             {/* Selected Shop Info Card */}
             {selectedCustomer && (
@@ -758,51 +780,74 @@ export default function App() {
 
           {/* Shop List */}
           <div className="space-y-2">
-            {filteredCustomers.map((c) => (
-              <div
-                key={c.id}
-                className="bg-white rounded-2xl p-3 border border-slate-200 shadow-xs flex items-center justify-between gap-2"
-              >
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-bold text-sm text-slate-900">{c.name}</h3>
+            {filteredCustomers.length === 0 ? (
+              <div className="bg-white rounded-2xl p-8 text-center text-slate-500 border-2 border-dashed border-slate-200">
+                <Users className="w-10 h-10 mx-auto mb-2 text-slate-400" />
+                <p className="text-sm font-bold text-slate-800">کوئی دکان موجود نہیں ہے</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  نئی دکان کا نام اور علاقہ درج کرنے کے لیے نیچے بٹن دبائیں
+                </p>
+                <button
+                  onClick={() => {
+                    setShopName("");
+                    setShopArea("");
+                    setShopPhone("");
+                    setShopBalance("");
+                    setIsNewShopModalOpen(true);
+                  }}
+                  className="mt-4 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold inline-flex items-center gap-1.5 shadow-xs"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>+ نئی دکان شامل کریں (+ Add Shop)</span>
+                </button>
+              </div>
+            ) : (
+              filteredCustomers.map((c) => (
+                <div
+                  key={c.id}
+                  className="bg-white rounded-2xl p-3 border border-slate-200 shadow-xs flex items-center justify-between gap-2"
+                >
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-bold text-sm text-slate-900">{c.name}</h3>
+                      <button
+                        onClick={() => {
+                          setEditingCustomer(c);
+                          setShopName(c.name);
+                          setShopArea(c.address || "");
+                          setShopPhone(c.phone || "");
+                          setShopBalance(c.balance.toString());
+                          setIsEditShopModalOpen(true);
+                        }}
+                        className="p-1 text-slate-400 hover:text-slate-600 rounded-md"
+                        title="ایڈٹ کریں"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      📍 {c.address || "علاقہ سیٹ نہیں"} {c.phone ? `• 📞 ${c.phone}` : ""}
+                    </p>
+                  </div>
+
+                  <div className="text-right">
+                    <span className="text-sm font-black font-mono text-amber-700 block">
+                      Rs {c.balance.toLocaleString("en-PK")}
+                    </span>
                     <button
                       onClick={() => {
-                        setEditingCustomer(c);
-                        setShopName(c.name);
-                        setShopArea(c.address || "");
-                        setShopPhone(c.phone || "");
-                        setShopBalance(c.balance.toString());
-                        setIsEditShopModalOpen(true);
+                        setRecoveryCustomer(c);
+                        setRecoveryAmount("");
+                        setIsRecoveryModalOpen(true);
                       }}
-                      className="p-1 text-slate-400 hover:text-slate-600 rounded-md"
-                      title="ایڈٹ کریں"
+                      className="mt-1 px-3 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-lg border border-emerald-200 transition"
                     >
-                      <Edit2 className="w-3.5 h-3.5" />
+                      + وصولی درج کریں
                     </button>
                   </div>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    📍 {c.address || "علاقہ سیٹ نہیں"} {c.phone ? `• 📞 ${c.phone}` : ""}
-                  </p>
                 </div>
-
-                <div className="text-right">
-                  <span className="text-sm font-black font-mono text-amber-700 block">
-                    Rs {c.balance.toLocaleString("en-PK")}
-                  </span>
-                  <button
-                    onClick={() => {
-                      setRecoveryCustomer(c);
-                      setRecoveryAmount("");
-                      setIsRecoveryModalOpen(true);
-                    }}
-                    className="mt-1 px-3 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-lg border border-emerald-200 transition"
-                  >
-                    + وصولی درج کریں
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </main>
       )}
@@ -836,50 +881,72 @@ export default function App() {
           </div>
 
           <div className="space-y-2">
-            {products.map((p) => (
-              <div
-                key={p.id}
-                className="bg-white rounded-2xl p-3 border border-slate-200 shadow-xs flex items-center justify-between gap-2"
-              >
-                <div>
-                  <h3 className="font-bold text-sm text-slate-900">{p.name}</h3>
-                  <div className="flex items-center gap-2 text-xs text-slate-500 mt-0.5">
-                    <span className="font-mono font-bold text-emerald-700 text-sm">
-                      Rs {p.rate_ctn.toLocaleString("en-PK")} / کاٹن
-                    </span>
-                    {p.retail_price > 0 && (
-                      <span className="text-[11px] text-slate-400">
-                        MRP: Rs {p.retail_price}
+            {products.length === 0 ? (
+              <div className="bg-white rounded-2xl p-8 text-center text-slate-500 border-2 border-dashed border-slate-200">
+                <Store className="w-10 h-10 mx-auto mb-2 text-slate-400" />
+                <p className="text-sm font-bold text-slate-800">کوئی سامان موجود نہیں ہے</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  سامان کا نام اور کاٹن ریٹ شامل کرنے کے لیے نیچے بٹن دبائیں
+                </p>
+                <button
+                  onClick={() => {
+                    setProdName("");
+                    setProdRateCtn("");
+                    setProdRetail("");
+                    setIsNewProductModalOpen(true);
+                  }}
+                  className="mt-4 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold inline-flex items-center gap-1.5 shadow-xs"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>+ نیا سامان شامل کریں (+ Add Product)</span>
+                </button>
+              </div>
+            ) : (
+              products.map((p) => (
+                <div
+                  key={p.id}
+                  className="bg-white rounded-2xl p-3 border border-slate-200 shadow-xs flex items-center justify-between gap-2"
+                >
+                  <div>
+                    <h3 className="font-bold text-sm text-slate-900">{p.name}</h3>
+                    <div className="flex items-center gap-2 text-xs text-slate-500 mt-0.5">
+                      <span className="font-mono font-bold text-emerald-700 text-sm">
+                        Rs {p.rate_ctn.toLocaleString("en-PK")} / کاٹن
                       </span>
-                    )}
+                      {p.retail_price > 0 && (
+                        <span className="text-[11px] text-slate-400">
+                          MRP: Rs {p.retail_price}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => {
+                        setEditingProduct(p);
+                        setProdName(p.name);
+                        setProdRateCtn(p.rate_ctn.toString());
+                        setProdCtnSize(p.ctn_size.toString());
+                        setProdRetail(p.retail_price > 0 ? p.retail_price.toString() : "");
+                        setIsEditProductModalOpen(true);
+                      }}
+                      className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition"
+                      title="ایڈٹ کریں"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteProduct(p.id)}
+                      className="p-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl transition"
+                      title="ڈیلیٹ کریں"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
-
-                <div className="flex items-center gap-1.5">
-                  <button
-                    onClick={() => {
-                      setEditingProduct(p);
-                      setProdName(p.name);
-                      setProdRateCtn(p.rate_ctn.toString());
-                      setProdCtnSize(p.ctn_size.toString());
-                      setProdRetail(p.retail_price > 0 ? p.retail_price.toString() : "");
-                      setIsEditProductModalOpen(true);
-                    }}
-                    className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition"
-                    title="ایڈٹ کریں"
-                  >
-                    <Edit2 className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => handleDeleteProduct(p.id)}
-                    className="p-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl transition"
-                    title="ڈیلیٹ کریں"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </main>
       )}
@@ -1428,16 +1495,33 @@ export default function App() {
 
               <button
                 onClick={() => {
+                  if (confirm("کیا آپ تمام دکانیں، سامان اور بلز ڈیلیٹ کر کے بالکل خالی ایپ بنانا چاہتے ہیں؟\n\nDelete all shops, products and bills?")) {
+                    Storage.clearAllData();
+                    refreshAll();
+                    setSelectedCustomerId(null);
+                    setCart({});
+                    setIsSettingsModalOpen(false);
+                    alert("تمام ڈیٹا صاف کر دیا گیا ہے۔");
+                  }
+                }}
+                className="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-xs transition"
+              >
+                <Trash2 className="w-4 h-4" />
+                <span>تمام ڈیٹا صاف کریں (Clear All Data)</span>
+              </button>
+
+              <button
+                onClick={() => {
                   if (confirm("کیا آپ واقعی تمام ڈیٹا اصلی حالت پر ری سیٹ کرنا چاہتے ہیں؟")) {
                     Storage.resetToDefault();
                     refreshAll();
                     setIsSettingsModalOpen(false);
                   }
                 }}
-                className="w-full py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl flex items-center justify-center gap-2"
+                className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl flex items-center justify-center gap-2 text-xs"
               >
                 <RotateCcw className="w-4 h-4" />
-                <span>تمام ڈیٹا ری سیٹ کریں</span>
+                <span>ڈیفالٹ پر ری سیٹ کریں</span>
               </button>
             </div>
           </div>

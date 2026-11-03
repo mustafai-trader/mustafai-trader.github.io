@@ -95,54 +95,46 @@ const STORAGE_KEYS = {
   CATEGORIES: "mustafai_categories",
 };
 
-// Initial Seed Data
+// Initial Seed Data - Clean slate by default
 const DEFAULT_SETTINGS: CompanySettings = {
   company_name: "MUSTAFAI TRADERS",
   company_name_urdu: "مصطفائی ٹریڈرز",
-  address: "CHANDANI CHOWK SANKHTRA ROAD DHAMTHAL",
-  phone: "0303-4942537 / 0300-7101761 / 0308-6137732",
-  salesman_name: "Jabar Shoukat",
+  address: "",
+  phone: "",
+  salesman_name: "Salesman",
   currency: "Rs",
   receipt_footer: "Thank you for your business / شکریہ، آپ کے تعاون کا بہت شکریہ",
 };
 
-const DEFAULT_CATEGORIES = [
-  "Snacks & Chips",
-  "Nimko & Daal",
-  "Biscuits & Bakery",
-  "Confectionery",
-  "Papad & Snacks",
-  "General Items",
+const DEFAULT_CATEGORIES: string[] = [
+  "General",
 ];
 
-const DEFAULT_PRODUCTS: Product[] = [
-  { id: 1, code: "P-101", name: "ALLO GOBIRS RS 10", name_urdu: "آلو گوبھی چپس", category: "Snacks & Chips", retail_price: 10, ctn_size: 6, rate_ctn: 579.96, rate_pcs: 96.66, stock_ctn: 25, stock_pcs: 0, min_stock_alert: 5, default_disc: 1.55 },
-  { id: 2, code: "P-102", name: "SHAIDU CHASKA RS 10", name_urdu: "شیدو چسکا", category: "Snacks & Chips", retail_price: 10, ctn_size: 6, rate_ctn: 579.96, rate_pcs: 96.66, stock_ctn: 30, stock_pcs: 0, min_stock_alert: 5, default_disc: 1.55 },
-  { id: 3, code: "P-103", name: "MASTER BIRYANI RS 10", name_urdu: "ماسٹر بریانی چپس", category: "Snacks & Chips", retail_price: 10, ctn_size: 6, rate_ctn: 579.96, rate_pcs: 96.66, stock_ctn: 20, stock_pcs: 0, min_stock_alert: 5, default_disc: 1.55 },
-  { id: 4, code: "P-104", name: "GUPSHAP RS 10", name_urdu: "گپ شپ", category: "Snacks & Chips", retail_price: 10, ctn_size: 6, rate_ctn: 579.96, rate_pcs: 96.66, stock_ctn: 40, stock_pcs: 0, min_stock_alert: 5, default_disc: 1.72 },
-  { id: 5, code: "P-105", name: "MASTI CHASKA RS 10", name_urdu: "مستی چسکا", category: "Snacks & Chips", retail_price: 10, ctn_size: 6, rate_ctn: 579.96, rate_pcs: 96.66, stock_ctn: 15, stock_pcs: 0, min_stock_alert: 5, default_disc: 1.55 },
-  { id: 6, code: "P-106", name: "CHASKA MASKA PAPR RS 10", name_urdu: "چسکا مسکا پاپڑ", category: "Papad & Snacks", retail_price: 10, ctn_size: 6, rate_ctn: 580.02, rate_pcs: 96.67, stock_ctn: 35, stock_pcs: 0, min_stock_alert: 5, default_disc: 5.00 },
-  { id: 7, code: "P-107", name: "PATATO STICKS RS 30", name_urdu: "پوٹیٹو اسٹکس 30 والی", category: "Snacks & Chips", retail_price: 30, ctn_size: 36, rate_ctn: 969.84, rate_pcs: 26.94, stock_ctn: 18, stock_pcs: 0, min_stock_alert: 5, default_disc: 0.00 },
-  { id: 8, code: "P-108", name: "NIMKO RS 50", name_urdu: "نمکو 50 روپے والی", category: "Nimko & Daal", retail_price: 50, ctn_size: 24, rate_ctn: 1080.00, rate_pcs: 45.00, stock_ctn: 50, stock_pcs: 0, min_stock_alert: 10, default_disc: 2.00 },
-  { id: 9, code: "P-109", name: "NIMKO RS 100", name_urdu: "نمکو 100 روپے والی", category: "Nimko & Daal", retail_price: 100, ctn_size: 12, rate_ctn: 1080.00, rate_pcs: 90.00, stock_ctn: 30, stock_pcs: 0, min_stock_alert: 5, default_disc: 2.00 },
-  { id: 10, code: "P-110", name: "PEANUT RS 50", name_urdu: "مونگ پھلی پینٹ 50 والی", category: "Nimko & Daal", retail_price: 50, ctn_size: 24, rate_ctn: 1100.00, rate_pcs: 45.83, stock_ctn: 22, stock_pcs: 0, min_stock_alert: 5, default_disc: 2.00 },
-  { id: 11, code: "P-111", name: "PEANUT RS 100", name_urdu: "مونگ پھلی پینٹ 100 والی", category: "Nimko & Daal", retail_price: 100, ctn_size: 12, rate_ctn: 1100.00, rate_pcs: 91.66, stock_ctn: 15, stock_pcs: 0, min_stock_alert: 5, default_disc: 2.00 },
-  { id: 12, code: "P-112", name: "DAAL MOONG RS 20", name_urdu: "دال مونگ 20 والی", category: "Nimko & Daal", retail_price: 20, ctn_size: 48, rate_ctn: 864.00, rate_pcs: 18.00, stock_ctn: 40, stock_pcs: 0, min_stock_alert: 8, default_disc: 1.50 },
-  { id: 13, code: "P-113", name: "DAAL MOONG RS 50", name_urdu: "دال مونگ 50 والی", category: "Nimko & Daal", retail_price: 50, ctn_size: 24, rate_ctn: 1080.00, rate_pcs: 45.00, stock_ctn: 25, stock_pcs: 0, min_stock_alert: 5, default_disc: 2.00 },
-];
+const DEFAULT_PRODUCTS: Product[] = [];
 
-const DEFAULT_CUSTOMERS: Customer[] = [
-  { id: 1, code: "2614", name: "TAHRI SCHOOL CANTEEN", name_urdu: "طاہری اسکول کینٹین", phone: "03001234567", route_name: "Pindi Bohri Tabish", address: "PINDI BOHRI TABISH - SUPANWAL STOP", balance: 31957.0, credit_limit: 50000 },
-  { id: 2, code: "2615", name: "AL-MADINA KARYANA STORE", name_urdu: "المدینہ کریانہ اسٹور", phone: "03019876543", route_name: "Chandani Chowk", address: "CHANDANI CHOWK DHAMTHAL", balance: 14500.0, credit_limit: 40000 },
-  { id: 3, code: "2616", name: "BISMILLAH GENERAL STORE", name_urdu: "بسم اللہ جنرل اسٹور", phone: "03055554443", route_name: "Sankhtra Road", address: "SANKHTRA ROAD MAIN STOP", balance: 8200.0, credit_limit: 30000 },
-  { id: 4, code: "2617", name: "IQBAL TRADERS & SNACKS", name_urdu: "اقبال ٹریڈرز", phone: "03081122334", route_name: "Kotla Stop", address: "KOTLA STOP MARKET", balance: 45000.0, credit_limit: 80000 },
-  { id: 5, code: "2618", name: "ASIF CONFECTIONERY", name_urdu: "آصف کنفیکشنری", phone: "03024466880", route_name: "Main Bazaar", address: "MAIN BAZAAR CANTEEN", balance: 5300.0, credit_limit: 25000 },
-];
+const DEFAULT_CUSTOMERS: Customer[] = [];
+
+// Helper to ensure clean slate migration for existing browser storage
+function ensureCleanSlate(): void {
+  if (typeof window === "undefined") return;
+  try {
+    if (localStorage.getItem("mustafai_clean_slate_v2") !== "true") {
+      localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify([]));
+      localStorage.setItem(STORAGE_KEYS.CUSTOMERS, JSON.stringify([]));
+      localStorage.setItem(STORAGE_KEYS.INVOICES, JSON.stringify([]));
+      localStorage.setItem(STORAGE_KEYS.PAYMENTS, JSON.stringify([]));
+      localStorage.setItem("mustafai_clean_slate_v2", "true");
+    }
+  } catch (e) {
+    console.error("Clean slate error:", e);
+  }
+}
 
 // Helper to get from LocalStorage safely
 function getStorage<T>(key: string, defaultValue: T): T {
   if (typeof window === "undefined") return defaultValue;
   try {
+    ensureCleanSlate();
     const raw = localStorage.getItem(key);
     if (!raw) {
       localStorage.setItem(key, JSON.stringify(defaultValue));
@@ -523,11 +515,18 @@ export const Storage = {
     }
   },
 
+  clearAllData(): void {
+    setStorage(STORAGE_KEYS.PRODUCTS, []);
+    setStorage(STORAGE_KEYS.CUSTOMERS, []);
+    setStorage(STORAGE_KEYS.INVOICES, []);
+    setStorage(STORAGE_KEYS.PAYMENTS, []);
+  },
+
   resetToDefault(): void {
     setStorage(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS);
     setStorage(STORAGE_KEYS.CATEGORIES, DEFAULT_CATEGORIES);
-    setStorage(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
-    setStorage(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
+    setStorage(STORAGE_KEYS.PRODUCTS, []);
+    setStorage(STORAGE_KEYS.CUSTOMERS, []);
     setStorage(STORAGE_KEYS.INVOICES, []);
     setStorage(STORAGE_KEYS.PAYMENTS, []);
   },
